@@ -99,7 +99,7 @@ $display_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : "Guest_
                         The premium protocol for group expenses. No matter the currency, we calculate the fairness so you don't have to.
                     </p>
                     <div class="flex flex-wrap gap-4">
-                        <a href="add_exp.php">
+                        <a href="assets/php/add_expense.php">
                         <button onclick="checkAccess()" class="bg-blue-600 text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-blue-500 transition shadow-xl transform hover:-translate-y-1">
                             Get Stared
                         </button>

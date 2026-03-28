@@ -1,48 +1,75 @@
-<?php
-require_once 'db.php';
-header('Content-Type: application/json');
+<?php 
+session_start();
+require_once 'db.php'; 
 
-$group_id = $_POST['group_id'];
-$title = $_POST['title'];
-$total_amount = $_POST['total_amount'];
-$payer_name = $_POST['payer_name'];
-$debtor_names = json_decode($_POST['debtors']);
-
-try {
-    $conn->beginTransaction();
-
-    // 1. Find Payer ID
-    $stmt = $conn->prepare("SELECT user_id FROM users WHERE full_name = ?");
-    $stmt->execute([$payer_name]);
-    $payer = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$payer) throw new Exception("Payer '$payer_name' not found.");
-    $payer_id = $payer['user_id'];
-
-    // 2. Insert into 'expenses'
-    $stmt = $conn->prepare("INSERT INTO expenses (group_id, paid_by_user_id, title, total_amount) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$group_id, $payer_id, $title, $total_amount]);
-    $expense_id = $conn->lastInsertId();
-
-    // 3. Calculate share
-    $share = $total_amount / (count($debtor_names) + 1);
-
-    // 4. Save Balances
-    foreach ($debtor_names as $d_name) {
-        $stmt = $conn->prepare("SELECT user_id FROM users WHERE full_name = ?");
-        $stmt->execute([$d_name]);
-        $debtor = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$debtor) throw new Exception("Friend '$d_name' not found.");
-
-        $ins = $conn->prepare("INSERT INTO member_balances (expense_id, user_id, amount_owed) VALUES (?, ?, ?)");
-        $ins->execute([$expense_id, $debtor['user_id'], $share]);
+// 1. PROCESS GROUP SAVING (POST)
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['group_name'])) {
+    header('Content-Type: application/json');
+    $name = trim($_POST['group_name']);
+    
+    try {
+        $stmt = $conn->prepare("INSERT INTO groups (group_name) VALUES (?)");
+        if ($stmt->execute([$name])) {
+            // PDO uses lastInsertId() instead of $conn->insert_id
+            echo json_encode(["success" => true, "group_id" => $conn->lastInsertId()]);
+        }
+    } catch (PDOException $e) {
+        echo json_encode(["success" => false, "message" => $e->getMessage()]);
     }
-
-    $conn->commit();
-    echo json_encode(["success" => true]);
-
-} catch (Exception $e) {
-    if ($conn->inTransaction()) $conn->rollBack();
-    echo json_encode(["success" => false, "message" => $e->getMessage()]);
+    exit; 
 }
+
+// 2. LOAD PAGE DATA
+$acc_holder = $_SESSION['full_name'] ?? "Guest";
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Splitter Pro</title>
+    <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+   <div class="wrapper">
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>Groups</h3>
+        </div>
+        <button class="add-group-btn" onclick="createNewGroup()">+ New Group</button>
+        <ul class="list-unstyled components">
+            <?php
+            // PDO FETCH LOOP
+            try {
+                $query = $conn->query("SELECT * FROM groups ORDER BY created_at DESC");
+                while($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                    echo "<li><a href='#' class='group-link' data-id='{$row['group_id']}' data-name='{$row['group_name']}'>
+                          <i class='fas fa-users'></i> " . htmlspecialchars($row['group_name']) . "</a></li>";
+                }
+            } catch (PDOException $e) {
+                echo "<li class='text-danger p-2'>Error loading groups</li>";
+            }
+            ?>       
+        </ul>
+    </nav>
+
+    <div id="content">
+        <header class="main-header">
+            <button type="button" id="sidebarCollapse" class="btn-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h2 id="currentGroupName">Select a Group</h2>
+        </header>
+
+        <div id="dynamicWorkspace" class="container-fluid"></div>
+    </div>
+</div>
+
+<script>
+    const ACCOUNT_HOLDER_NAME = "<?php echo htmlspecialchars($acc_holder); ?>";
+</script>
+<script src="script.js?v=<?php echo time(); ?>"></script>
+</body>
+</html>
