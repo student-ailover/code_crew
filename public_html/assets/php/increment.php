@@ -5,49 +5,59 @@ require_once 'db.php';
 $response = ["success" => false, "message" => "An error occurred."];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $group_id = isset($_POST['group_id']) ? (int)$_POST['group_id'] : 0;
     $user_id = isset($_POST['user_id']) ? (int)$_POST['user_id'] : 0;
+    $expense_id = isset($_POST['expense_id']) ? (int)$_POST['expense_id'] : 0;
+    $group_id = isset($_POST['group_id']) ? (int)$_POST['group_id'] : 0;
 
-    if ($group_id > 0 && $user_id > 0) {
+    if ($user_id > 0 && $expense_id > 0 && $group_id > 0) {
         // Start transaction
         $conn->begin_transaction();
 
         try {
-            // 1. Try to record the membership
-            // This will fail if the user_id + group_id combination already exists
-            $stmt1 = $conn->prepare("INSERT INTO group_members (group_id, user_id) VALUES (?, ?)");
-            $stmt1->bind_param("ii", $group_id, $user_id);
+            // 1. Check if the balance is already settled and update it to 1
+            // We use the WHERE clause to ensure we only update if it is currently 0
+            $stmt1 = $conn->prepare("UPDATE member_balances 
+                                    SET is_settled = 1 
+                                    WHERE user_id = ? AND expense_id = ? AND is_settled = 0");
+            $stmt1->bind_param("ii", $user_id, $expense_id);
             $stmt1->execute();
 
-            // 2. Increment count and update is_paid if threshold is met
-            // We use a single query for efficiency
+            // If affected_rows is 0, it means the balance was either already settled or doesn't exist
+            if ($stmt1->affected_rows === 0) {
+                throw new Exception("Payment already settled or record not found.");
+            }
+
+            // 2. Increment current_user_count in the groups table
             $stmt2 = $conn->prepare("UPDATE groups 
-                                    SET current_user_count = current_user_count + 1,
-                                        is_paid = IF(current_user_count + 1 >= max_users, 1, 0)
-                                    WHERE id = ?");
+                                    SET current_user_count = current_user_count + 1 
+                                    WHERE group_id = ?");
             $stmt2->bind_param("i", $group_id);
             $stmt2->execute();
 
-            // If both succeeded, save changes
-            $conn->commit();
-            $response["success"] = true;
-            $response["message"] = "Success! You have joined the group.";
+            // 3. Check if current_user_count >= max_users and update is_paid to 1
+            $stmt3 = $conn->prepare("UPDATE groups 
+                                    SET is_paid = 1 
+                                    WHERE group_id = ? AND current_user_count >= max_users");
+            $stmt3->bind_param("i", $group_id);
+            $stmt3->execute();
 
-        } catch (mysqli_sql_exception $e) {
-            // Rollback if duplicate entry (error code 1062) or other error
-            $conn->rollback();
+            // Commit all changes
+            $conn->commit();
             
-            if ($e->getCode() == 1062) {
-                $response["message"] = "This person has already paid";
-            } else {
-                $response["message"] = "Database error: " . $e->getMessage();
-            }
+            $response["success"] = true;
+            $response["message"] = "Payment recorded! Group status updated.";
+
+        } catch (Exception $e) {
+            // Rollback if any step fails or if already settled
+            $conn->rollback();
+            $response["message"] = $e->getMessage();
         }
 
         if (isset($stmt1)) $stmt1->close();
         if (isset($stmt2)) $stmt2->close();
+        if (isset($stmt3)) $stmt3->close();
     } else {
-        $response["message"] = "Invalid group or user data.";
+        $response["message"] = "Missing or invalid IDs.";
     }
 }
 
