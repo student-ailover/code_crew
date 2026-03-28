@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Create Account | SplitFair</title>
+    <style>
+        /* Smoothly hide placeholder text on hover */
+        input:hover::placeholder {
+            color: transparent;
+            transition: color 0.2s ease;
+        }
+    </style>
+</head>
+<body class="bg-white font-sans antialiased">
+
+    <div class="flex min-h-screen">
+        
+        <div class="hidden lg:flex lg:w-1/3 bg-slate-900 p-12 flex-col justify-between relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-blue-600 rounded-full opacity-20 blur-3xl"></div>
+            
+            <div class="relative z-10">
+                <a href="main.html" class="font-black text-3xl tracking-tighter text-blue-500 italic mb-12 uppercase inline-block hover:opacity-80 transition-opacity">SplitFair</a>
+                
+                <h1 class="text-4xl font-black text-white leading-tight mb-6">
+                    Start splitting <br>fairly today.
+                </h1>
+                <ul class="space-y-6">
+                    <li class="flex items-center gap-3 text-slate-300">
+                        <span class="bg-blue-600/20 text-blue-400 p-1 rounded-md text-[10px] font-bold">✓</span> 
+                        <span class="font-medium">Free forever for individuals</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-300">
+                        <span class="bg-blue-600/20 text-blue-400 p-1 rounded-md text-[10px] font-bold">✓</span> 
+                        <span class="font-medium">Secure data encryption</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-300">
+                        <span class="bg-blue-600/20 text-blue-400 p-1 rounded-md text-[10px] font-bold">✓</span> 
+                        <span class="font-medium">Instant settlement links</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="relative z-10 text-slate-500 text-xs font-bold uppercase tracking-widest">
+                © 2026 SplitFair Global
+            </div>
+        </div>
+
+        <div class="w-full lg:w-2/3 flex items-center justify-center p-8 bg-gray-50">
+            <div class="max-w-xl w-full bg-white p-10 rounded-[2.5rem] shadow-xl border border-gray-100">
+                
+                <div class="mb-8 text-center lg:text-left">
+                    <h2 class="text-3xl font-black text-gray-900 tracking-tight">Create your account</h2>
+                    <p class="text-sm text-gray-500 font-medium mt-1">Join the community and settle up with ease.</p>
+                </div>
+
+                <form action="main.html" method="GET" class="space-y-5">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">First Name</label>
+                            <input type="text" name="first_name" required placeholder="Enter Your First Name"
+                                class="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none transition-all duration-300 text-sm font-medium hover:bg-white hover:border-blue-600 hover:ring-4 hover:ring-blue-100 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Last Name</label>
+                            <input type="text" name="last_name" required placeholder="Enter Your Last Name"
+                                class="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none transition-all duration-300 text-sm font-medium hover:bg-white hover:border-blue-600 hover:ring-4 hover:ring-blue-100 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Email Address</label>
+                        <input type="email" name="email" required placeholder="xyz@example.com"
+                            class="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none transition-all duration-300 text-sm font-medium hover:bg-white hover:border-blue-600 hover:ring-4 hover:ring-blue-100 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Phone Number</label>
+                            <input type="tel" name="phone_number" placeholder="+91 "
+                                class="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none transition-all duration-300 text-sm font-medium hover:bg-white hover:border-blue-600 hover:ring-4 hover:ring-blue-100 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Date of Birth</label>
+                            <input type="date" name="birthday" required
+                                class="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none transition-all duration-300 text-sm font-medium text-gray-400 hover:bg-white hover:border-blue-600 hover:ring-4 hover:ring-blue-100 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Create Password</label>
+                            <input type="password" name="password" required placeholder="Min. 8 characters"
+                                class="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none transition-all duration-300 text-sm font-medium hover:bg-white hover:border-blue-600 hover:ring-4 hover:ring-blue-100 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Confirm Password</label>
+                            <input type="password" name="confirm_password" required placeholder="Repeat password"
+                                class="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none transition-all duration-300 text-sm font-medium hover:bg-white hover:border-blue-600 hover:ring-4 hover:ring-blue-100 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100">
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 pt-2">
+                        <input type="checkbox" id="terms" required class="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer">
+                        <label for="terms" class="text-xs text-gray-500 leading-relaxed font-medium cursor-pointer">
+                            I agree to the <a href="#" class="text-blue-600 underline font-bold">Terms of Service</a> and confirm that my details are accurate for KYC purposes.
+                        </label>
+                    </div>
+
+                    <button type="submit" 
+                        class="w-full py-4 bg-blue-600 text-white font-black rounded-2xl hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 uppercase tracking-widest mt-4 transform hover:-translate-y-0.5 active:scale-95">
+                        Create Account
+                    </button>
+                </form>
+
+                <p class="text-center text-sm text-gray-500 mt-8 font-medium">
+                    Already have an account? 
+                    <a href="login.html" class="font-bold text-blue-600 hover:text-blue-700 transition">Log in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
