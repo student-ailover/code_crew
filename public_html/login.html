@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Login | SplitFair</title>
+    <style>
+        /* Smoothly hide placeholder text on hover */
+        input:hover::placeholder {
+            color: transparent;
+            transition: color 0.2s ease;
+        }
+    </style>
+</head>
+
+<body class="bg-white font-sans antialiased">
+
+    <div class="flex min-h-screen">
+
+        <div class="hidden lg:flex lg:w-1/2 bg-slate-900 p-16 flex-col justify-between relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-blue-600 rounded-full opacity-20 blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-blue-700 rounded-full opacity-10 blur-3xl"></div>
+
+            <div class="relative z-10">
+                <a href="main.html" class="font-black text-4xl tracking-tighter text-blue-500 italic mb-20 block uppercase">SplitFair</a>
+                <h1 class="text-6xl font-black text-white leading-tight mb-8">
+                    Settle bills, <br>stay <span class="text-blue-400">friends.</span>
+                </h1>
+                <p class="text-slate-400 text-xl max-w-md leading-relaxed font-medium">
+                    Join over 10,000 users who use SplitFair to keep their group finances transparent and fair.
+                </p>
+            </div>
+
+            <div class="relative z-10">
+                <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl border border-slate-700 inline-block shadow-2xl">
+                    <p class="text-white font-bold text-sm">Security Note:</p>
+                    <p class="text-slate-400 text-xs mt-1 leading-relaxed">We use bank-level encryption to secure your transaction data and database records.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+            <div class="max-w-md w-full">
+
+                <div class="lg:hidden text-center mb-10">
+                    <a href="main.html" class="font-black text-3xl tracking-tighter text-blue-600 italic uppercase">SplitFair</a>
+                </div>
+
+                <div class="mb-10 text-center lg:text-left">
+                    <h2 class="text-3xl font-black text-gray-900 tracking-tight">Ready to settle up?</h2>
+                    <p class="mt-2 text-sm text-gray-500 font-medium leading-relaxed">
+                        Log in to see who owes what and keep things <span class="text-blue-600 font-bold italic">fair</span>.
+                    </p>
+                </div>
+
+                <form action="main.html" method="GET" class="space-y-6">
+
+                    <div>
+                        <label for="email" class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1">Email Address</label>
+                        <input id="email" name="email" type="email" required
+                            class="appearance-none block w-full px-5 py-4 bg-white border border-gray-200 rounded-2xl outline-none transition-all duration-300 text-sm font-medium hover:border-blue-600 hover:ring-4 hover:ring-blue-100 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                            placeholder="e.g. xyz@example.com">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-2 ml-1">
+                            <label for="password" class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Password</label>
+                            <a href="#" class="text-xs font-bold text-blue-600 hover:underline transition">Forgot?</a>
+                        </div>
+                        <input id="password" name="password" type="password" required
+                            class="appearance-none block w-full px-5 py-4 bg-white border border-gray-200 rounded-2xl outline-none transition-all duration-300 text-sm font-medium hover:border-blue-600 hover:ring-4 hover:ring-blue-100 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                            placeholder="••••••••">
+                    </div>
+
+                    <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox"
+                            class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-600 font-medium cursor-pointer">Remember me</label>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full flex justify-center py-4 px-4 border border-transparent text-sm font-black rounded-2xl text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 uppercase tracking-widest transform hover:-translate-y-0.5 active:scale-95">
+                        login
+                    </button>
+
+                    <div class="relative py-4">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-200"></div>
+                        </div>
+                        <div class="relative flex justify-center text-[10px] uppercase font-black tracking-widest">
+                            <span class="px-2 bg-gray-50 text-gray-400">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <button type="button" class="flex items-center justify-center gap-2 py-3 border border-gray-200 rounded-xl bg-white hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm font-bold text-xs text-gray-600 active:scale-95">
+                            Google
+                        </button>
+                        <button type="button" class="flex items-center justify-center gap-2 py-3 border border-gray-200 rounded-xl bg-white hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm font-bold text-xs text-gray-600 active:scale-95">
+                            Apple ID
+                        </button>
+                    </div>
+                </form>
+
+                <p class="text-center text-sm text-gray-500 mt-10 font-medium">
+                    New to SplitFair?
+                    <a href="creat_acc.html" class="font-bold text-blue-600 hover:text-blue-700 transition">Create a free account</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
