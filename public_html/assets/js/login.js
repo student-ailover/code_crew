@@ -6,7 +6,7 @@ document.querySelector('form').addEventListener('submit', async function (e) {
 
     try {
         // 2. Send the request to login.php
-        const response = await fetch('assets/php/login.php', {
+        const response = await fetch('login.php', {
             method: 'POST',
             body: formData
         });
@@ -22,7 +22,7 @@ document.querySelector('form').addEventListener('submit', async function (e) {
         if (data.success) {
             // Success: Notify the user and redirect to the dashboard or main page
             alert("Welcome back, " + data.user_name + "!");
-            window.location.href = 'main.html'; 
+            window.location.href = 'main.php'; 
         } else {
             // Failure: Display the error message (e.g., "Invalid email or password")
             alert("Login Failed: " + data.message);

@@ -1,3 +1,36 @@
+<?php
+session_start();
+require_once 'assets/php/db.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    header('Content-Type: application/json');
+    
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $response = ["success" => false, "message" => "Invalid credentials"];
+
+    try {
+        $stmt = $conn->prepare("SELECT user_id, full_name, password FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['full_name'] = $user['full_name'];
+            $response = ["success" => true, "user_name" => $user['full_name']];
+        } else {
+            $response["message"] = $user ? "Incorrect password." : "Account not found.";
+        }
+    } catch (PDOException $e) {
+        $response["message"] = "Server error: " . $e->getMessage();
+    }
+
+    echo json_encode($response);
+    exit;
+}
+// ... Rest of your HTML stays exactly the same ...
+?>
+    
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,7 +57,7 @@
             <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-blue-700 rounded-full opacity-10 blur-3xl"></div>
 
             <div class="relative z-10">
-                <a href="main.html" class="font-black text-4xl tracking-tighter text-blue-500 italic mb-20 block uppercase">SplitFair</a>
+                <a href="main.php" class="font-black text-4xl tracking-tighter text-blue-500 italic mb-20 block uppercase">SplitFair</a>
                 <h1 class="text-6xl font-black text-white leading-tight mb-8">
                     Settle bills, <br>stay <span class="text-blue-400">friends.</span>
                 </h1>
@@ -45,7 +78,7 @@
             <div class="max-w-md w-full">
 
                 <div class="lg:hidden text-center mb-10">
-                    <a href="main.html" class="font-black text-3xl tracking-tighter text-blue-600 italic uppercase">SplitFair</a>
+                    <a href="main.php" class="font-black text-3xl tracking-tighter text-blue-600 italic uppercase">SplitFair</a>
                 </div>
 
                 <div class="mb-10 text-center lg:text-left">
@@ -55,7 +88,7 @@
                     </p>
                 </div>
 
-                <form action="main.html" method="GET" class="space-y-6">
+                <form action="main.php" method="GET" class="space-y-6">
 
                     <div>
                         <label for="email" class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1">Email Address</label>
@@ -112,6 +145,6 @@
         </div>
     </div>
 
-    <script src="assets/js/login.js"></script>
+    <script src="login.js"></script>
 </body>
 </html>
